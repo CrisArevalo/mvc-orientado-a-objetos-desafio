@@ -34,30 +34,32 @@ class ContactsCollection {
   } // FUNCIONA //
 
   getOneById(id:number){
-    const filtrado = this.array.filter(t => {
-      return t.id == id;
-    }) 
-
-    return filtrado;
+    const i = this.array.find(t =>{ //find te permite sacar 
+      return t.id == id;            // del array el objeto limpio :D.
+    })
+    
+    return i;
   } // FUNCIONA //
 
   save(){
-    fs.writeFile("contacts.json", JSON.stringify(this.array),"utf8", (err) => {
+    const saved = fs.writeFile("contacts.json", (this.array),"utf8", (err) => {
       if(err) throw err;
       console.log("Data has been saved!");      
     });
-  } // FUNCIONA //
+
+    return saved;
+  } // Por arreglar //
 }
 function main(){
   const con = new ContactsCollection();
   const persona = new Contact(5,"Cris");
 
   con.load();
-  con.addOne(persona);
-  con.save();
-
+  const prueba = con.getOneById(5);
+  console.log(prueba);
+  
   
 }
 main();
 
-//export { ContactsCollection };
+export { ContactsCollection };
