@@ -1,5 +1,5 @@
-import * as contacts from "./contacts.json";
-const fs = require('fs');
+import * as jsonfile from "jsonfile";
+
 class Contact {
   id: number;
   name: string;
@@ -10,23 +10,21 @@ class Contact {
 }
 
 class ContactsCollection {
-  array: any[] = [];
-  constructor(){
-
-  }
+  array: Contact[] = [];
 
   load(){ //Meto los datos del JSON al array.
-    contacts.forEach(t=> { //"contacts" es del import.
+    /*contacts.forEach(t=> { //"contacts" es del import.
       this.array.push(t);
-    })
+    }) SIN USAR LIBRERIAS*/
+    
+    /* CON LIBRERIA (JSON) */
+    const data = jsonfile.readFileSync("./contacts.json");
+    this.array = data;
+
   } // FUNCIONA //
 
-  addOne(Contact:Contact){
-    const contacto = {
-      id:Contact.id,
-      name:Contact.name
-    }
-    this.array.push(contacto);
+  addOne(contact:Contact){
+    this.array.push(contact);
   } // FUNCIONA //
 
   getAll(){
@@ -42,24 +40,8 @@ class ContactsCollection {
   } // FUNCIONA //
 
   save(){
-    const saved = fs.writeFile("contacts.json", (this.array),"utf8", (err) => {
-      if(err) throw err;
-      console.log("Data has been saved!");      
-    });
-
-    return saved;
-  } // Por arreglar //
+    jsonfile.writeFileSync("./contacts.json",this.array);
+  } // FUNCIONA //
 }
-function main(){
-  const con = new ContactsCollection();
-  const persona = new Contact(5,"Cris");
-
-  con.load();
-  const prueba = con.getOneById(5);
-  console.log(prueba);
-  
-  
-}
-main();
 
 export { ContactsCollection };

@@ -12,21 +12,26 @@ export class ContactsControllerOptions {
 class ContactsController {
   contacts: ContactsCollection;
   constructor() {
-    //this.contacts = contacts;
+    this.contacts = new ContactsCollection();
     this.contacts.load();
 
   }
 
   processOptions(options: ContactsControllerOptions) {
-    if(options.action == "get" && options.params){
-      const contacto = this.contacts.getOneById(options.params);
+    let resultado;
+    if(options.action == "get" && options.params.id){
+      resultado = this.contacts.getOneById(options.params.id);
+    }else if(options.action == "get"){
+      resultado = this.contacts.getAll();
+    }else if(options.action == "save" && options.params){
+      this.contacts.addOne(options.params);
+      this.contacts.save();
+      console.log("Data has been saved!");
+      
     }
+
+    return resultado;
   }
 }
-function main(){
-  const mock = new ContactsControllerOptions("get",1);
-  const prueba = new ContactsController();
-}
 
-main();
 export { ContactsController };
